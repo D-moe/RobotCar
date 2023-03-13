@@ -100,7 +100,7 @@ function init() {
         scheme = 'wss:';
     else
         scheme = 'ws:';
-    var wsUri           = scheme + '//' + window.location.hostname + '/wsdash';
+    var wsUri           = scheme + '//' + window.location.hostname + ':' + window.location.port + '/wsdash';
     websocket           = new WebSocket(wsUri);
     websocket.onopen    = function(evt) { onOpen    (evt) };
     websocket.onclose   = function(evt) { onClose   (evt) };

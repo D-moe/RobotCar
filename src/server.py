@@ -48,6 +48,7 @@ wsMod = MicroWebSrv2.LoadModule('WebSockets')
 wsMod.OnWebSocketAccepted = OnWebSocketAccepted
 
 mws2 = MicroWebSrv2()
+mws2.BindAddress = ('0.0.0.0', 8090)
 mws2.RootPath = '.'
 mws2.AddDefaultPage('index.html')
 mws2.SetEmbeddedConfig()
