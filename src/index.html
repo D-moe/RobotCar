@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Code Artists: Robot Car</title>
+        <meta charset="utf-8">
+        <meta name="description" content="Robot Car Home Page">
+        <!-- TODO: add favicon-->
+        <style>
+*
+{
+    box-sizing: border-box;
+}
+body
+{
+    margin: 0px;
+    padding: 0px;
+    font-family: monospace;
+}
+.row
+{
+    display: inline-flex;
+    clear: both;
+}
+.column-lateral
+{
+    float: left;
+    width: 15%;
+    min-width: 300px;
+}
+.column-central
+{
+    float: left;
+    width: 70%;
+    min-width: 300px;
+}
+#joystick
+{
+    border: 1px solid #FF0000;
+}
+.dashboard-div {
+    height : 350px;
+    padding: 10px;
+    background-color: #304050;
+    font: 15px monospace;
+    color: white;
+    overflow: scroll;
+}
+input {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    margin-top: 3px;
+    border: 2px solid #5FA3D3;
+}
+                </style>
+        <script src="joy.js"></script>
+    </head>
+    <h1>Code Artists Robot Car</h1>
+    <body style="padding: 0 70px;">
+        <div class="row">
+            <div class="column-lateral">
+                <div id="joy-1" style="width:200px;height:200px;margin:50px"></div>
+                [-100, 100] X: <input id="joy1X" type="text" /></br>
+                [-100, 100] Y: <input id="joy1Y" type="text" />
+                Direction: <input id="joy1Dir" type="text" /><br />
+            </div>
+            <div class="column-central">
+                <h2>Control Panel</h2>
+                <p>Expose relevant controls and values to monitor for the robot car here.</p>
+                <h3>Use Arrow Keys to Control</h3>
+                [-100, 100] X :<input id="joy2X" type="text" /></br>
+                [-100, 100] Y :<input id="joy2Y" type="text" />
+                <h3>Control Buttons</h3>
+                <form action="/test-post" method="post">
+                    FOO Input: <input type="text" name="test_input"><br />
+                    <input type="submit" value="DO FOO">
+                </form>
+                <h3>Metrics Dashboard</h3>
+                <div id="dashboard" class="dashboard-div"></div>
+            </div>
+
+        </div>
+        <script type="text/javascript">
+
+// Get joy-stick data.
+var joy1Dir = document.getElementById("joy1Dir");
+var joy1X = document.getElementById("joy1X");
+var joy1Y = document.getElementById("joy1Y");
+var Joy1 = new JoyStick('joy-1', {}, function(stickData) {
+    joy1Dir.value = stickData.cardinalDirection;
+    joy1X.value = stickData.x;
+    joy1Y.value = stickData.y;
+});
+
+// Create a websocket to listen to data updates from Python.
+function init() {
+    var scheme
+    if (window.location.protocol == 'https:')
+        scheme = 'wss:';
+    else
+        scheme = 'ws:';
+    var wsUri           = scheme + '//' + window.location.hostname + '/wsdash';
+    websocket           = new WebSocket(wsUri);
+    websocket.onopen    = function(evt) { onOpen    (evt) };
+    websocket.onclose   = function(evt) { onClose   (evt) };
+    websocket.onmessage = function(evt) { onMessage (evt) };
+    websocket.onerror   = function(evt) { onError   (evt) };
+}
+
+function getElmById(id) {
+    return document.getElementById(id);
+}
+
+function writeLineToBoard(line) {
+    var elm = getElmById('dashboard');
+    if (elm)
+    {
+        // TODO: instead of appending child elements, update a single child
+        // element's value.
+        var lineElm = document.createElement('div');
+        if (line) {
+            var time = new Date().toLocaleTimeString();
+            lineElm.innerText = "[" + time + "] " + line;
+        }
+        else
+            lineElm.innerHTML = '&nbsp;';
+        elm.appendChild(lineElm);
+        elm.scrollTop = elm.scrollHeight;
+    }
+}
+
+function onOpen(evt) {
+    writeLineToBoard("[CONNECTED TO CAR]")
+}
+
+function onClose(evt) {
+    writeLineToBoard("[CONNECTION CLOSED]")
+}
+
+function onMessage(evt) {
+    writeLineToBoard(evt.data)
+}
+
+function onError(evt) {
+    writeLineToBoard("[CONNECTION ERROR]")
+}
+
+window.addEventListener("load", init, false);
+
+
+// Handle Arrow Keys
+document.onkeydown = handleArrowKeys;
+document.onkeyup = handleArrowKeys;
+
+var map = {};
+function handleArrowKeys(e) {
+    e = e || window.event;
+
+    let iskeydown = e.type == 'keydown';
+    map[e.keyCode] = iskeydown;
+    if (!iskeydown && (Number(e.keyCode) >= 37 && Number(e.keyCode) <= 40)) {
+        joy2X.value = 0;
+        joy2Y.value = 0;
+    }
+    if (map["38"]) { // up
+        joy2Y.value = Math.min(Number(joy2Y.value) + 1, 100);
+    }
+    if (map["40"]) { // down
+        joy2Y.value = Math.max(Number(joy2Y.value) - 1, -100);
+    }
+    if (map["39"]) { // right
+        joy2X.value = Math.min(Number(joy2X.value) + 1, 100);
+    }
+    if (map["37"]) { // left
+        joy2X.value = Math.max(Number(joy2X.value) - 1, -100);
+    }
+}
+        </script>
+    </body>
+</html>
