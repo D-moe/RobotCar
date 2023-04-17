@@ -23,7 +23,7 @@ LINE_A = 26 # Maps to A0
 LINE_B = 14 # Maps to A1
 LINE_C = 27 # Maps to A2
 
-IR_PIN = 22 # Maps to 9
+IR_PIN = 36 # Maps to 9
 SDA = 21 # Maps to Arduino SDA pin
 SCL = 22 # Maps to Arduino SCL pin
 
