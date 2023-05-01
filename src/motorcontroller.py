@@ -11,8 +11,10 @@ class MotorController:
     def __init__(self, standby, pwm_a, a_in, pwm_b, b_in):
         self.standby = Pin(standby, mode=Pin.OUT, pull = None)
         self.pwm_a = PWM(Pin(pwm_a))
+        self.pwm_a.duty(0)
         self.a_in = Pin(a_in, mode=Pin.OUT, pull = None)
         self.pwm_b = PWM(Pin(pwm_b))
+        self.pwm_b.duty(0)
         self.b_in = Pin(b_in, mode=Pin.OUT, pull = None)
         # Start in standby so no movement
         self.standby.value(0)
