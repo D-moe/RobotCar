@@ -60,7 +60,7 @@ def test_run():
     led.write()
     servo.set(45)
     motors.set_right(-300)
-    motors.set_left(-00)
+    motors.set_left(-300)
     time.sleep(1)
     led[0] = (0, 0, 255)
     led.write()
