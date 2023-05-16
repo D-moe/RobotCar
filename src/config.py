@@ -15,13 +15,12 @@ PWM_A = 33 # Maps to 5
 PWM_B = 25 # Maps to 6
 B_IN = 27 # Maps to 8
 A_IN = 26 # Maps to 7
-# TODO(morleyd): Add in the standby pin.
-STBY = 17 # Maps to 3
+STBY = 5 # Maps to 3
 
 # Line Sensor
 # Relevant Datasheet:
 # https://cdn-shop.adafruit.com/product-files/3930/ITR20001-T.pdf
-LINE_A = 36 # Maps to A0x
+LINE_A = 36 # Maps to A0
 LINE_B = 39 # Maps to A1
 LINE_C = 34 # Maps to A2
 
