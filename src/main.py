@@ -9,6 +9,7 @@ from motorcontroller import MotorController
 from HCSR04 import HCSR04
 from Controllers import BangBangController, PIDController
 from linefollower import LineFollower
+from week4 import Week4
 import config
 import time
 import neopixel
@@ -76,9 +77,10 @@ def test_run():
 
 # Setup threading for the ultrasonic sensor to consistently update the distance over time
 print("just booted")
-test_run()
-test_run()
-test_run()
+
+week4 = Week4(led_1, ult_1, motors_1, servo_1)
+week4.run()
+
 # ult_thread = _thread.start_new_thread(ultrasonic_thread, (ult_1, 10))
 # controller_thread = _thread.start_new_thread(controller_thread, (pid_controller, 10))
 # test_run(motors, servo_1)
