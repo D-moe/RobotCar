@@ -19,6 +19,9 @@ class HCSR04:
         echo_timeout_us: Timeout in microseconds to listen to echo pin. 
         By default is based in sensor limit range (4m)
         """
+        self.last_dist = 0
+        self.min_dist = 0
+        self.max_dist = 400
         self.echo_timeout_us = echo_timeout_us
         # Init trigger pin (out)
         self.trigger = Pin(trigger_pin, mode=Pin.OUT, pull=None)
@@ -72,4 +75,11 @@ class HCSR04:
         # the sound speed on air (343.2 m/s), that It's equivalent to
         # 0.034320 cm/us that is 1cm each 29.1us
         cms = (pulse_time / 2) / 29.1
+        if cms < self.min_dist:
+            return self.last_dist
+        cms = min(self.max_dist, cms)
+        self.last_dist = cms
+
+        # Sometimes the distance is incorrectly reported as negative, put some basic range
+        # checking to ensure this isn't the case
         return cms
