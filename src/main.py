@@ -25,7 +25,7 @@ def controller_thread(controller, sampling_rate=10):
 def load_wifi():
     sta_if = network.WLAN(network.STA_IF)
     sta_if.active(True)
-    sta_if.connect('WhiteSky-Landsby')
+    sta_if.connect('network-name')
 
 
 print('this ran')
@@ -82,7 +82,7 @@ week5= Week5(led_1, ult_1, motors_1, servo_1)
 
 # Can change this to a while, to make your code run continously!
 while (config.current_state == 0):
-    week5.servo_sweep()
+    week5.run()
 
 # ult_thread = _thread.start_new_thread(ultrasonic_thread, (ult_1, 10))
 # controller_thread = _thread.start_new_thread(controller_thread, (pid_controller, 10))
